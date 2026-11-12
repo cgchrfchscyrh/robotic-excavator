@@ -1,47 +1,114 @@
 ---
 import "@fontsource-variable/manrope";
 import "../styles/global.css";
-import ResearchNav from "../components/ResearchNav.astro";
-import { research } from "../data/research";
-import { localPath } from "../lib/paths";
+import "../styles/excavator-story.css";
+import ExcavatorStory from "../components/ExcavatorStory.astro";
+import { project, bibtex, localPath } from "../data/project";
+import { imageCredits } from "../data/excavator";
+import ImageViewer from "../components/ImageViewer.astro";
+const awardUrl = "https://ascelibrary.org/jccee5/best_paper_awards";
+const title = "Robotic Excavator · Autonomy on Earth and Beyond";
 ---
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Construction robotics research and AI products: Robotic Excavator and Walkscribe." />
-    <link rel="icon" href={localPath("research.svg")} type="image/svg+xml" />
-    <title>Research &amp; Products · Construction Robotics &amp; AI</title>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={project.description} /><meta name="theme-color" content="#eeece6" /><meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} /><meta property="og:description" content={project.description} /><meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL(localPath("images/earth-beyond/vision.webp"), Astro.site).href} />
+    <meta name="citation_title" content={project.title} />
+    {project.authors.map((author) => <meta name="citation_author" content={author} />)}
+    <meta name="citation_publication_date" content="2024/08/06" /><meta name="citation_journal_title" content="Journal of Computing in Civil Engineering" /><meta name="citation_doi" content="10.1061/JCCEE5.CPENG-5884" /><meta name="citation_pdf_url" content={project.manuscript} />
+    <link rel="icon" type="image/svg+xml" href={localPath("favicon.svg")} /><title>{title}</title>
   </head>
-  <body>
-    <a class="skip-link" href="#projects">Skip to projects</a>
-    <ResearchNav current="all" />
-    <main class="research-index">
-      <header class="paper-header"><p class="project-name">Construction Robotics & AI</p><h1>Research &amp; products</h1><p class="venue">Robotic learning and intelligent assistance for construction.</p></header>
-      <div id="projects" class="project-list">
-        {research.map((project) => (
-          <article>
-            <a href={localPath(project.path)} tabindex="-1" aria-hidden="true"><img src={localPath(project.image)} alt="" width={project.imageWidth} height={project.imageHeight} /></a>
-            <div><h2><a href={localPath(project.path)}>{project.name}</a></h2><p class="project-subtitle">{project.subtitle}</p><p>{project.description}</p><a class="project-open" href={localPath(project.path)}>{project.id === "construction-agent" ? "View product →" : "View research →"}</a></div>
-          </article>
-        ))}
-      </div>
+  <body class="excavator-story">
+    <a class="skip-link" href="#overview">Skip to overview</a>
+    <main>
+      <header id="overview" class="vision-hero">
+        <img class="vision-image" src={localPath("images/earth-beyond/vision.webp")} alt="A full-size autonomous excavator on a dusty construction site at sunset; industry context photograph" width="2400" height="1600" fetchpriority="high" />
+        <div class="vision-shade"></div>
+        <div class="vision-content frame"><h1>Advancing Construction Machine Autonomy on Earth and Beyond.</h1></div>
+        <div class="hero-bottom"><a href="#media-credits">Photo: Built Robotics / Unsplash</a></div>
+      </header>
+      <ExcavatorStory />
+      <section id="publications" class="publications-section">
+        <div class="frame"><h2>Publication</h2>
+          <article class="featured-paper"><div class="featured-meta"><a class="award-label" href={awardUrl}>✳ 2024 Best Paper Award ↗</a></div><h3><a href={project.paper}>{project.title}</a></h3><p class="publication-authors">{project.authors.join(" · ")}</p><p class="publication-venue">{project.venue} · 38(6), 04024031</p><p class="publication-contribution">Teleoperation demonstrations, selected keyframes, and visual goals for learning excavation trajectories.</p><div class="publication-links"><a href={project.paper}>Read paper ↗</a><a href="#citation">Cite this work ↓</a></div></article>
+          <section id="citation" class="citation-section"><details class="technical-detail" id="citation-details"><summary>Cite the featured paper <span aria-hidden="true">+</span></summary><div class="citation-heading"><span>BibTeX</span><button type="button" id="copy-citation" hidden>Copy BibTeX</button></div><pre tabindex="0" aria-label="BibTeX citation"><code id="bibtex">{bibtex}</code></pre><p class="citation-status" id="citation-status" role="status" aria-live="polite"></p><p class="data-note">Data, models, and code are available from the corresponding author upon reasonable request. <a href={project.manuscript}>Author manuscript ↗</a></p></details></section>
+        </div>
+      </section>
     </main>
-    <footer><p>Research and product pages · <a href="https://github.com/RomanHauksson/academic-project-astro-template">Template</a> · <a href="https://nerfies.github.io/">Nerfies</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
+    <footer class="excavator-footer"><div class="frame"><div class="footer-heading"><span>Robotic Excavator</span><a href="#overview">Back to top ↑</a></div><p>Research supported by NSF grants 2129003 and 2222810.</p><details id="media-credits" class="technical-detail"><summary>Images, research media &amp; credits <span aria-hidden="true">+</span></summary><p>Research demonstrations and figures: the project team and the featured paper.</p><ul class="credit-list">{imageCredits.map((credit) => <li><strong>{credit.name}</strong> — <a href={credit.source}>{credit.creator}</a> · <a href={credit.licenseUrl}>{credit.license}</a><span>{credit.note}</span></li>)}</ul><p>Site adapted from <a href="https://github.com/RomanHauksson/academic-project-astro-template">Roman Hauksson-Neill’s academic project template</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Research materials and photographs retain their respective rights.</p></details></div></footer>
+    <ImageViewer />
+    <script>
+      const openDisclosure = () => {
+        const id = location.hash === "#citation" ? "citation-details" : location.hash === "#media-credits" ? "media-credits" : "";
+        const details = document.getElementById(id);
+        if (details instanceof HTMLDetailsElement) details.open = true;
+      };
+      document.querySelectorAll<HTMLAnchorElement>('a[href="#citation"], a[href="#media-credits"]').forEach(link => link.addEventListener("click", () => {
+        const id = link.hash === "#citation" ? "citation-details" : "media-credits";
+        const details = document.getElementById(id); if (details instanceof HTMLDetailsElement) details.open = true;
+      }));
+      window.addEventListener("hashchange", openDisclosure); openDisclosure();
+      document.querySelectorAll<HTMLElement>("[data-tabs]").forEach((group) => {
+        const tabs = [...group.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+        const select = (selected: HTMLButtonElement) => tabs.forEach((tab) => {
+          const active = tab === selected;
+          tab.setAttribute("aria-selected", String(active)); tab.tabIndex = active ? 0 : -1;
+          const panel = document.getElementById(tab.getAttribute("aria-controls") ?? "");
+          if (!panel) return; panel.hidden = !active;
+          panel.querySelectorAll<HTMLVideoElement>("video").forEach(video => {
+            if (!active) video.pause();
+            else if (!matchMedia("(prefers-reduced-motion: reduce)").matches) video.play().catch(() => {});
+          });
+        });
+        tabs.forEach((tab, index) => {
+          tab.addEventListener("click", () => select(tab));
+          tab.addEventListener("keydown", event => {
+            let next = index;
+            if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+            else if (event.key === "ArrowLeft") next = (index + tabs.length - 1) % tabs.length;
+            else if (event.key === "Home") next = 0;
+            else if (event.key === "End") next = tabs.length - 1;
+            else return;
+            event.preventDefault(); select(tabs[next]); tabs[next].focus();
+          });
+        });
+        const selectFromHash = () => {
+          const selected = tabs.find(tab => tab.getAttribute("aria-controls") === location.hash.slice(1));
+          if (selected) select(selected);
+        };
+        window.addEventListener("hashchange", selectFromHash);
+        selectFromHash();
+      });
+      // Stop clips outside the viewport, including clips in closed disclosures or tabs.
+      const visibleVideos = new Set<HTMLVideoElement>();
+      const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+      const syncPlayback = (video: HTMLVideoElement) => {
+        if (!visibleVideos.has(video) || document.hidden || video.closest("[hidden]") || motionPreference.matches) video.pause();
+        else if (!video.dataset.userPaused) video.play().catch(() => {});
+      };
+      const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) visibleVideos.add(video); else visibleVideos.delete(video);
+        syncPlayback(video);
+      }), { threshold: 0.25 });
+      document.querySelectorAll<HTMLVideoElement>("video[data-research-motion]").forEach(video => {
+        observer.observe(video);
+        // A pointer/keyboard interaction with the player's controls takes ownership of playback.
+        video.addEventListener("pointerdown", () => { video.dataset.userPaused = "true"; });
+        video.addEventListener("keydown", () => { video.dataset.userPaused = "true"; });
+      });
+      document.addEventListener("visibilitychange", () => visibleVideos.forEach(syncPlayback));
+      motionPreference.addEventListener("change", () => visibleVideos.forEach(syncPlayback));
+      const button = document.querySelector<HTMLButtonElement>("#copy-citation")!;
+      const status = document.querySelector<HTMLElement>("#citation-status")!;
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(document.querySelector("#bibtex")!.textContent ?? ""); status.textContent = "BibTeX copied to clipboard."; }
+        catch { const range = document.createRange(); range.selectNodeContents(document.querySelector("#bibtex")!); const selection = getSelection(); selection?.removeAllRanges(); selection?.addRange(range); status.textContent = "Citation selected. Press Ctrl+C or ⌘C to copy."; }
+      });
+    </script>
   </body>
 </html>
-<style>
-  .research-index { min-height: calc(100dvh - 145px); }
-  .project-list { max-width: 1000px; padding: 0 28px 64px; margin: 0 auto; }
-  article { display: grid; grid-template-columns: 310px 1fr; align-items: center; gap: 40px; border-top: 1px solid var(--line); padding: 34px 0; }
-  article:last-child { border-bottom: 1px solid var(--line); }
-  article img { display: block; width: 100%; height: auto; border-radius: 3px; }
-  h2 { font-size: 25px; margin-bottom: 9px; }
-  h2 a { color: #29292d; text-decoration: none; }
-  h2 a:hover { color: var(--link); }
-  .project-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 13px; }
-  article p { font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
-  .project-open { font-size: 14px; }
-  @media (max-width: 700px) { article { grid-template-columns: 1fr; gap: 24px; } article img { max-width: 440px; } .project-list { padding-inline: 22px; } }
-</style>

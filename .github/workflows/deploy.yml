@@ -24,8 +24,8 @@ jobs:
           node-version: 24
           build-cmd: npm run build
         env:
-          SITE_URL: https://mutekigamer.github.io
-          BASE_PATH: /lab-websites
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}
 
   deploy:
     needs: build
